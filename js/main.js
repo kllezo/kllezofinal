@@ -194,19 +194,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  /* ─── THEME TOGGLE ────────────────────────── */
-  const themeBtn = document.getElementById('themeToggleBtn');
-  if (themeBtn) {
-    // Apply saved theme on load
-    if (localStorage.getItem('kllezo_theme') === 'light') {
-      document.body.classList.add('light');
-      themeBtn.textContent = '🌙';
-    }
-    themeBtn.addEventListener('click', () => {
-      const isLight = document.body.classList.toggle('light');
-      themeBtn.textContent = isLight ? '🌙' : '☀️';
-      localStorage.setItem('kllezo_theme', isLight ? 'light' : 'dark');
-    });
-  }
 });

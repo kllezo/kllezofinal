@@ -116,19 +116,20 @@
 }
 .hero-text--italic { font-style: italic; color: rgba(251,245,233,0.65); }
 
-/* Hero CTA button — beige (highest contrast against dark hero bg) */
+/* Hero CTA button — beige (inviting) */
 .hero-sticky .btn-primary,
 .hero-wrapper .btn-primary {
   background: #fbf5e9;
   color: #09453e;
-  filter: none;
-  box-shadow: 0 4px 24px rgba(251,245,233,0.15);
+  opacity: 1;
+  box-shadow: 0 4px 20px rgba(251,245,233,0.15);
 }
 .hero-sticky .btn-primary:hover,
 .hero-wrapper .btn-primary:hover {
-  filter: brightness(0.96);
-  transform: scale(1.04);
-  box-shadow: 0 6px 32px rgba(251,245,233,0.25);
+  background: #f0e8d8;
+  transform: scale(1.05);
+  opacity: 1;
+  box-shadow: 0 6px 28px rgba(251,245,233,0.25);
 }
 
 /* Scene 3 tagline */

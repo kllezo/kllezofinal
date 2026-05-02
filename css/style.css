@@ -228,11 +228,55 @@ body::before {
 }
 
 /* =============================================
-   BUTTONS — Color hierarchy
+   BUTTONS — Green/Beige hierarchy
    ============================================= */
 
-/* PRIMARY CTA — Beige bg / Green text (highest contrast, most important action) */
+/* PRIMARY: Green bg, beige text — Hero CTA, Final CTA */
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 36px;
+  height: 52px;
+  background: #09453e;
+  color: #fbf5e9;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+  white-space: nowrap;
+  position: relative;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  transform: scale(1.05);
+  opacity: 0.92;
+  box-shadow: 0 6px 28px rgba(9,69,62,0.4);
+}
+.btn-primary--lg { height: 60px; padding: 0 52px; font-size: 14px; }
+
+/* Navbar stays glass to not clash with dark/transparent nav */
+.navbar .btn-primary {
+  background: rgba(255,255,255,0.12);
+  color: var(--beige);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-weight: 500;
+  opacity: 1;
+}
+.navbar .btn-primary:hover {
+  background: rgba(255,255,255,0.22);
+  transform: scale(1.025);
+  box-shadow: none;
+}
+
+/* SECONDARY: Beige bg, green text — service buttons, ghost actions */
+.btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -247,59 +291,13 @@ body::before {
   font-weight: 600;
   letter-spacing: 0.08em;
   border-radius: 999px;
-  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
-  white-space: nowrap;
-  position: relative;
-  cursor: pointer;
-}
-.btn-primary:hover {
-  transform: scale(1.04);
-  filter: brightness(0.96);
-  box-shadow: 0 6px 28px rgba(251,245,233,0.25);
-}
-.btn-primary--lg { height: 60px; padding: 0 52px; font-size: 14px; }
-
-/* Navbar stays glass against transparent navbar bg */
-.navbar .btn-primary {
-  background: rgba(255,255,255,0.12);
-  color: var(--beige);
-  border: 1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  font-weight: 500;
-  filter: none;
-}
-.navbar .btn-primary:hover {
-  background: rgba(255,255,255,0.22);
-  transform: scale(1.025);
-  box-shadow: none;
-  filter: none;
-}
-
-/* SECONDARY CTA — Green bg / Beige text (supporting action) */
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 0 36px;
-  height: 52px;
-  background: #09453e;
-  color: #fbf5e9;
-  border: 1px solid rgba(255,255,255,0.2);
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  border-radius: 999px;
-  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+  transition: transform 200ms ease, opacity 200ms ease;
   white-space: nowrap;
   cursor: pointer;
 }
 .btn-secondary:hover {
-  transform: scale(1.04);
-  filter: brightness(1.1);
-  box-shadow: 0 6px 24px rgba(9,69,62,0.4);
+  transform: scale(1.05);
+  opacity: 0.9;
 }
 .btn-secondary--lg { height: 60px; padding: 0 52px; font-size: 14px; }
 
@@ -470,7 +468,7 @@ body::before {
 .footer__legal a:hover { color: rgba(251,245,233,0.7); }
 
 /* =============================================
-   FOOTER CTA — Beige card, green text + button
+   FOOTER CTA — Transparent, dominant glass card
    ============================================= */
 .footer-cta {
   background: transparent;
@@ -478,42 +476,38 @@ body::before {
   text-align: center;
   position: relative;
 }
-.footer-cta::before,
-.footer-cta::after { display: none; }
-
+/* Glass card: big + dominant GREEN anchor */
 .footer-cta__card {
   max-width: 1100px;
   width: 90%;
   margin: 0 auto;
-  background: #fbf5e9;
+  background: #09453e;
   border-radius: 28px;
   padding: 60px 50px;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 60px rgba(9,69,62,0.45), 0 4px 24px rgba(0,0,0,0.3);
 }
-
-/* Inside beige CTA card: button must be GREEN for contrast */
+/* Beige button inside green card — high contrast */
 .footer-cta__card .btn-primary {
-  background: #09453e;
-  color: #fbf5e9;
+  background: #fbf5e9;
+  color: #09453e;
   box-shadow: none;
-  filter: none;
+  opacity: 1;
 }
 .footer-cta__card .btn-primary:hover {
-  background: #0b5a50;
-  transform: scale(1.04);
-  filter: none;
-  box-shadow: 0 6px 24px rgba(9,69,62,0.35);
+  background: #f0e8d8;
+  transform: scale(1.05);
+  opacity: 0.9;
+  box-shadow: 0 6px 24px rgba(251,245,233,0.25);
 }
-
 .footer-cta__eyebrow {
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #687b75;
+  color: rgba(251,245,233,0.55);
   margin-bottom: 14px;
 }
 .footer-cta__headline {
@@ -521,14 +515,35 @@ body::before {
   font-weight: 400;
   font-size: clamp(32px, 4.5vw, 64px);
   line-height: 1.05;
-  color: #09453e;
+  color: var(--beige);
   margin-bottom: 32px;
 }
 .footer-cta__note {
   margin-top: 14px;
   font-size: 12px;
   letter-spacing: 0.05em;
-  color: #687b75;
+  color: rgba(251,245,233,0.45);
+}
+.footer-cta__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(251,245,233,0.5);
+  margin-bottom: 14px;
+}
+.footer-cta__headline {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(32px, 4.5vw, 64px);
+  line-height: 1.05;
+  color: var(--beige);
+  margin-bottom: 32px;
+}
+.footer-cta__note {
+  margin-top: 14px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: rgba(251,245,233,0.4);
 }
 
 /* =============================================
@@ -994,143 +1009,4 @@ body::before {
   .apply-layout { grid-template-columns: 1fr; gap: 48px; }
   .form-row { grid-template-columns: 1fr; }
   .form-card { padding: 28px 24px; }
-}
-
-/* =============================================
-   SMOOTH THEME TRANSITION
-   ============================================= */
-body {
-  transition: background 0.4s ease, color 0.4s ease;
-}
-
-/* =============================================
-   LIGHT MODE — body.light
-   ============================================= */
-body.light {
-  background: #fbf5e9;
-  color: #09453e;
-  --bg: #fbf5e9;
-  --beige: #09453e;
-  --muted: #687b75;
-  --border: rgba(9,69,62,0.08);
-  --border-mid: rgba(9,69,62,0.14);
-}
-
-/* Headings */
-body.light h1,
-body.light h2,
-body.light h3,
-body.light h4 { color: #09453e; }
-
-/* Body text */
-body.light p,
-body.light span,
-body.light li { color: #687b75; }
-
-/* Navbar */
-body.light .navbar {
-  background: rgba(251,245,233,0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(9,69,62,0.1);
-}
-body.light .navbar.scrolled {
-  background: rgba(251,245,233,0.95);
-}
-body.light .navbar__link { color: #687b75; }
-body.light .navbar__link:hover,
-body.light .navbar__link.active { color: #09453e; }
-body.light .navbar__link.active::after { background: #09453e; }
-
-/* Cards / sections */
-body.light .section-card,
-body.light .cta-section,
-body.light .service-intro__card {
-  background: rgba(9,69,62,0.05);
-  border: 1px solid rgba(9,69,62,0.12);
-}
-body.light .service-intro__card:hover { background: rgba(9,69,62,0.1); }
-
-/* Footer CTA card */
-body.light .footer-cta__card {
-  background: #09453e;
-}
-
-/* Footer */
-body.light .footer {
-  background: #09453e;
-  color: #fbf5e9;
-}
-
-/* Service blocks */
-body.light .service-block {
-  background: #fbf5e9;
-}
-body.light .service-block__luxury { color: rgba(9,69,62,0.5); }
-body.light .service-block__title  { color: #09453e; }
-body.light .service-block__bullet { color: #687b75; border-color: rgba(9,69,62,0.12); }
-body.light .service-block__close  { color: #09453e; }
-
-/* Image containers */
-body.light .service-block__img-wrap {
-  background: rgba(9,69,62,0.05);
-  box-shadow:
-    0 20px 60px rgba(9,69,62,0.15),
-    0 0 40px rgba(9,69,62,0.1);
-  border-color: rgba(9,69,62,0.1);
-}
-
-/* Primary button — stays green in light */
-body.light .btn-primary {
-  background: #09453e;
-  color: #fbf5e9;
-}
-
-/* Secondary button — stays beige in light */
-body.light .btn-secondary {
-  background: #fbf5e9;
-  color: #09453e;
-  border: 1px solid rgba(9,69,62,0.2);
-}
-
-/* Navbar button in light */
-body.light .navbar .btn-primary {
-  background: #09453e;
-  color: #fbf5e9;
-  border: none;
-  backdrop-filter: none;
-}
-
-/* =============================================
-   THEME TOGGLE BUTTON
-   ============================================= */
-.theme-btn-wrap {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-.theme-btn-wrap button {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: #09453e;
-  color: #fbf5e9;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  box-shadow: 0 4px 20px rgba(9,69,62,0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.theme-btn-wrap button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 28px rgba(9,69,62,0.55);
-}
-body.light .theme-btn-wrap button {
-  background: #fbf5e9;
-  color: #09453e;
-  box-shadow: 0 4px 20px rgba(9,69,62,0.2);
 }
