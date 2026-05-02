@@ -468,7 +468,7 @@ body::before {
 .footer__legal a:hover { color: rgba(251,245,233,0.7); }
 
 /* =============================================
-   FOOTER CTA — Transparent, dominant glass card
+   FOOTER CTA — Beige card, green text + button
    ============================================= */
 .footer-cta {
   background: transparent;
@@ -476,38 +476,42 @@ body::before {
   text-align: center;
   position: relative;
 }
-/* Glass card: big + dominant GREEN anchor */
+.footer-cta::before,
+.footer-cta::after { display: none; }
+
 .footer-cta__card {
   max-width: 1100px;
   width: 90%;
   margin: 0 auto;
-  background: #09453e;
+  background: #fbf5e9;
   border-radius: 28px;
   padding: 60px 50px;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 12px 60px rgba(9,69,62,0.45), 0 4px 24px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
-/* Beige button inside green card — high contrast */
+
+/* Green button inside beige card */
 .footer-cta__card .btn-primary {
-  background: #fbf5e9;
-  color: #09453e;
+  background: #09453e;
+  color: #fbf5e9;
   box-shadow: none;
   opacity: 1;
 }
 .footer-cta__card .btn-primary:hover {
-  background: #f0e8d8;
+  background: #0b5a50;
   transform: scale(1.05);
-  opacity: 0.9;
-  box-shadow: 0 6px 24px rgba(251,245,233,0.25);
+  opacity: 1;
+  box-shadow: 0 6px 24px rgba(9,69,62,0.3);
 }
+
 .footer-cta__eyebrow {
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(251,245,233,0.55);
+  color: #687b75;
   margin-bottom: 14px;
 }
 .footer-cta__headline {
@@ -515,35 +519,14 @@ body::before {
   font-weight: 400;
   font-size: clamp(32px, 4.5vw, 64px);
   line-height: 1.05;
-  color: var(--beige);
+  color: #09453e;
   margin-bottom: 32px;
 }
 .footer-cta__note {
   margin-top: 14px;
   font-size: 12px;
   letter-spacing: 0.05em;
-  color: rgba(251,245,233,0.45);
-}
-.footer-cta__eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(251,245,233,0.5);
-  margin-bottom: 14px;
-}
-.footer-cta__headline {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(32px, 4.5vw, 64px);
-  line-height: 1.05;
-  color: var(--beige);
-  margin-bottom: 32px;
-}
-.footer-cta__note {
-  margin-top: 14px;
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  color: rgba(251,245,233,0.4);
+  color: #687b75;
 }
 
 /* =============================================
