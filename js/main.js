@@ -137,24 +137,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ─── SERVICE IMAGE: CURSOR-REACTIVE LIGHT (Level 3) ─── */
+  /* ─── SERVICE IMAGE: 3D CURSOR TILT ─── */
   document.querySelectorAll('.service-block__img-wrap').forEach(container => {
     let raf;
-    container.addEventListener('mousemove', e => {
+    container.addEventListener('mousemove', (e) => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const rect = container.getBoundingClientRect();
+
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
+
         container.style.setProperty('--x', `${x}px`);
         container.style.setProperty('--y', `${y}px`);
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = -(y - centerY) / 20;
+        const rotateY = (x - centerX) / 20;
+
+        container.style.transform = `
+          perspective(800px)
+          rotateX(${rotateX}deg)
+          rotateY(${rotateY}deg)
+          scale(1.02)
+        `;
       });
     });
+
     container.addEventListener('mouseleave', () => {
       cancelAnimationFrame(raf);
-      /* Reset to center so ::before fades cleanly */
       container.style.setProperty('--x', '50%');
       container.style.setProperty('--y', '50%');
+      container.style.transform = `
+        perspective(800px)
+        rotateX(0deg)
+        rotateY(0deg)
+        scale(1)
+      `;
     });
   });
 

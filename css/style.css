@@ -657,21 +657,14 @@ body::before {
   /* G) Depth bg layer */
   background: rgba(9,69,62,0.15);
   backdrop-filter: blur(6px);
-  /* A) Subtle depth shadow — no wide glow */
-  box-shadow:
-    0 10px 24px rgba(0,0,0,0.32),
-    0 0 10px rgba(9,69,62,0.5);
+  /* A) Base shadow */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
   /* H) Edge highlight frame */
   border: 1px solid rgba(255,255,255,0.08);
-  /* C) Float transition */
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-/* C) Float on hover */
-.service-block__img-wrap:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 14px 32px rgba(0,0,0,0.36),
-    0 0 10px rgba(9,69,62,0.5);
+  /* C) 3D context */
+  transition: transform 0.15s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 /* F) Cursor-reactive inner light (Level 3) */
