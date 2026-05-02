@@ -657,10 +657,10 @@ body::before {
   /* G) Depth bg layer */
   background: rgba(9,69,62,0.15);
   backdrop-filter: blur(6px);
-  /* A) Strong depth shadow */
+  /* A) Subtle depth shadow — no wide glow */
   box-shadow:
-    0 20px 60px rgba(0,0,0,0.4),
-    0 0 60px rgba(9,69,62,0.25);
+    0 10px 24px rgba(0,0,0,0.32),
+    0 0 14px rgba(9,69,62,0.12);
   /* H) Edge highlight frame */
   border: 1px solid rgba(255,255,255,0.08);
   /* C) Float transition */
@@ -670,8 +670,8 @@ body::before {
 .service-block__img-wrap:hover {
   transform: translateY(-6px);
   box-shadow:
-    0 28px 72px rgba(0,0,0,0.48),
-    0 0 72px rgba(9,69,62,0.32);
+    0 14px 32px rgba(0,0,0,0.36),
+    0 0 18px rgba(9,69,62,0.14);
 }
 
 /* F) Cursor-reactive inner light (Level 3) */
