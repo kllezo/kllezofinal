@@ -148,22 +148,15 @@ body::before {
   width: 100%;
   padding: 0 2vw;
 }
-.logo {
+.navbar__logo {
+  height: 28px;
   display: flex;
   align-items: center;
-  gap: 10px;
 }
-.logo-img {
-  height: 32px;
+.navbar__logo img {
+  height: 58px;
   width: auto;
-  display: block;
-}
-.logo-text {
-  font-size: 16px;
-  font-family: var(--font-display);
-  font-weight: 500;
-  color: var(--beige);
-  line-height: 1;
+  object-fit: contain;
 }
 .navbar__nav {
   display: flex;
@@ -413,8 +406,9 @@ body::before {
   align-items: start;
 }
 .footer__logo {
-  display: flex;
-  align-items: center;
+  width: 150px;
+  height: auto;
+  object-fit: contain;
   margin-bottom: 20px;
   filter: brightness(0) invert(1);
   opacity: 0.9;
