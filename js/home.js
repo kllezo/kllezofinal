@@ -418,36 +418,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Apply exit parallax only when the scene is scrolling up
         if (localScrollY >= 0) {
-          // 1. STRETCH SCROLL RANGE (ULTRA SLOW MODE)
+          // 1. INCREASE TOTAL SCROLL RANGE (MANDATORY)
           let progress = localScrollY / (sectionHeight * 4);
           
-          // 2. ADD HARD HOLD (NO MOVEMENT ZONE)
+          // 2. CREATE GLOBAL HOLD (CRITICAL)
           let p = progress;
-          if (p < 0.35) {
+          if (p < 0.4) {
             p = 0;
           } else {
-            p = (p - 0.35) / 0.65;
+            p = (p - 0.4) / 0.6;
           }
 
-          // 5. ADD MAX CAP
-          p = Math.min(p, 1);
-          
-          // 3. SLOW DOWN TRANSFORM
-          // 4. SLOW OPACITY DROP
-          const opacity = 1 - (p * 0.6);
-          const translateY = -(p * 80);
+          // 3 & 4. SPLIT TIMING & CAP VALUES
+          const p1 = Math.min(Math.max(0, p), 1);
+          const p2 = Math.min(Math.max(0, p - 0.2), 1);
 
-          if (opacity > -0.1) {
-            inner.style.transform = `translateY(${translateY}px)`;
-            inner.style.opacity = opacity.toFixed(3);
-          } else {
-            inner.style.transform = `translateY(-80px)`;
-            inner.style.opacity = 0;
-          }
+          let lineCount = 0;
+          Array.from(inner.children).forEach((child) => {
+             let isLine = child.classList.contains('hero-line') || child.querySelector('.hero-line');
+             let useP1 = true;
+             
+             if (isLine) {
+                 useP1 = (lineCount === 0);
+                 lineCount++;
+             } else {
+                 useP1 = (lineCount === 0);
+             }
+
+             if (useP1) {
+                 // FIRST LINE
+                 if (p1 > 0) {
+                     let op1 = Math.max(1 - (p1 * 0.6), 0.2); // 5. MIN OPACITY FLOOR
+                     child.style.transform = `translateY(${-p1 * 80}px)`;
+                     child.style.opacity = op1.toFixed(3);
+                     child.style.transition = 'none';
+                 } else {
+                     child.style.transform = '';
+                     child.style.opacity = '';
+                     child.style.transition = '';
+                 }
+             } else {
+                 // SECOND LINE (DELAYED)
+                 if (p2 > 0) {
+                     let op2 = Math.max(1 - (p2 * 0.5), 0.2); // 5. MIN OPACITY FLOOR
+                     child.style.transform = `translateY(${-p2 * 60}px)`;
+                     child.style.opacity = op2.toFixed(3);
+                     child.style.transition = 'none';
+                 } else {
+                     child.style.transform = '';
+                     child.style.opacity = '';
+                     child.style.transition = '';
+                 }
+             }
+          });
         } else {
           // Reset when scrolling back above the scene start
-          inner.style.transform = '';
-          inner.style.opacity = '';
+          Array.from(inner.children).forEach(child => {
+             child.style.transform = '';
+             child.style.opacity = '';
+             child.style.transition = '';
+          });
         }
       });
     }
