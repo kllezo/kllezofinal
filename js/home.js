@@ -401,6 +401,51 @@ document.addEventListener('DOMContentLoaded', () => {
     particles.forEach(p => p.draw(timestamp, prog));
     const zone = prog < 0.33 ? 0 : prog < 0.66 ? 1 : 2;
     if (zone !== currentScene) setScene(zone);
+
+    // --- HERO PARALLAX DURATION FIX ---
+    if (heroWrapper) {
+      const rect = heroWrapper.getBoundingClientRect();
+      const scrolled = Math.max(0, -rect.top);
+      const total = heroWrapper.offsetHeight - window.innerHeight;
+      const sectionHeight = total / 3; // Scroll height allocated per scene
+      
+      scenes.forEach((scene, i) => {
+        const inner = scene.querySelector('.hero-scene__inner');
+        if (!inner) return;
+
+        const sceneStart = sectionHeight * i;
+        const localScrollY = scrolled - sceneStart;
+
+        // Apply exit parallax only when the scene is scrolling up
+        if (localScrollY >= 0) {
+          // 1. EXTEND SCROLL RANGE
+          const progress = localScrollY / (sectionHeight * 1.8);
+          
+          // 4. ADD HOLD ZONE
+          const adjustedProgress = Math.max(0, progress - 0.15);
+          
+          // 5. SMOOTH EASING
+          const eased = 1 - Math.pow(1 - adjustedProgress, 3);
+          
+          // 2. DELAY EXIT ANIMATION & 3. REDUCE TRANSLATION SPEED
+          const opacity = 1 - (eased * 1.2);
+          const translateY = -(eased * 120);
+
+          if (opacity > -0.1) {
+            inner.style.transform = `translateY(${translateY}px)`;
+            inner.style.opacity = opacity.toFixed(3);
+          } else {
+            inner.style.transform = `translateY(-120px)`;
+            inner.style.opacity = 0;
+          }
+        } else {
+          // Reset when scrolling back above the scene start
+          inner.style.transform = '';
+          inner.style.opacity = '';
+        }
+      });
+    }
+
     requestAnimationFrame(loop);
   }
 
