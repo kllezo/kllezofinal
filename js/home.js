@@ -418,24 +418,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Apply exit parallax only when the scene is scrolling up
         if (localScrollY >= 0) {
-          // 1. EXTEND SCROLL RANGE
-          const progress = localScrollY / (sectionHeight * 1.8);
+          // 1. STRETCH SCROLL RANGE (ULTRA SLOW MODE)
+          let progress = localScrollY / (sectionHeight * 4);
           
-          // 4. ADD HOLD ZONE
-          const adjustedProgress = Math.max(0, progress - 0.15);
+          // 2. ADD HARD HOLD (NO MOVEMENT ZONE)
+          let p = progress;
+          if (p < 0.35) {
+            p = 0;
+          } else {
+            p = (p - 0.35) / 0.65;
+          }
+
+          // 5. ADD MAX CAP
+          p = Math.min(p, 1);
           
-          // 5. SMOOTH EASING
-          const eased = 1 - Math.pow(1 - adjustedProgress, 3);
-          
-          // 2. DELAY EXIT ANIMATION & 3. REDUCE TRANSLATION SPEED
-          const opacity = 1 - (eased * 1.2);
-          const translateY = -(eased * 120);
+          // 3. SLOW DOWN TRANSFORM
+          // 4. SLOW OPACITY DROP
+          const opacity = 1 - (p * 0.6);
+          const translateY = -(p * 80);
 
           if (opacity > -0.1) {
             inner.style.transform = `translateY(${translateY}px)`;
             inner.style.opacity = opacity.toFixed(3);
           } else {
-            inner.style.transform = `translateY(-120px)`;
+            inner.style.transform = `translateY(-80px)`;
             inner.style.opacity = 0;
           }
         } else {
