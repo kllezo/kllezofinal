@@ -175,9 +175,22 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ─── SUBMIT TO SUPABASE ────────────────────────────────────────────── */
     try {
       console.log("SUPABASE INSERT PAYLOAD:", payload)
+
+      const dbPayload = {
+        full_name:     payload.full_name,
+        business_name: payload.business_name,
+        email:         payload.email,
+        phone:         payload.phone,
+        purpose:       payload.purpose,
+        stage:         payload.stage,
+        bottleneck:    payload.bottleneck,
+        details:       payload.details,
+        source:        payload.source
+      }
+
       const { error } = await db
         .from('applications')
-        .insert([payload])
+        .insert([dbPayload])
 
       if (error) {
         console.error('[Kllezo] Supabase insert error:', error)
