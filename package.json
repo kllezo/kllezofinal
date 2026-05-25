@@ -1,0 +1,29 @@
+{
+  "name": "kllezo-final-code",
+  "version": "1.0.0",
+  "description": "Kllezo website with Supabase backend integration",
+  "main": "index.js",
+  "scripts": {
+    "setup:db": "node --input-type=module scripts/setup-db.mjs",
+    "test:connection": "node scripts/test-connection.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kllezo/kllezofinal.git"
+  },
+  "keywords": [
+    "kllezo",
+    "supabase"
+  ],
+  "author": "Kllezo",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kllezo/kllezofinal/issues"
+  },
+  "homepage": "https://github.com/kllezo/kllezofinal#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.1",
+    "dotenv": "^16.0.0"
+  }
+}

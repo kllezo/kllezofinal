@@ -1,10 +1,24 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   KLLEZO — apply.js
+   Handles the application form: validation + Supabase submission
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('applyForm');
   if (!form) return;
 
-  /* ─── SERVICE CARDS (multi-select) ─── */
-  const serviceCards = document.querySelectorAll('.service-card');
-  const purposeHidden = document.getElementById('purposeHidden');
+  /* ─── INIT SUPABASE CLIENT ──────────────────────────────────────────────── */
+  // supabase global is provided by the CDN script loaded in apply.html
+  // Config values come from js/supabase-config.js (anon key only — safe for browser)
+  const { createClient } = window.supabase
+  const db = createClient(
+    window.KLLEZO_SUPABASE_URL,
+    window.KLLEZO_SUPABASE_ANON_KEY
+  )
+
+  /* ─── SERVICE CARDS (multi-select) ─────────────────────────────────────── */
+  const serviceCards    = document.querySelectorAll('.service-card');
+  const purposeHidden   = document.getElementById('purposeHidden');
   const selectedServices = new Set();
 
   serviceCards.forEach(card => {
@@ -20,11 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedServices.add(val);
       }
       if (purposeHidden) purposeHidden.value = Array.from(selectedServices).join(',');
-      // Clear error
-      const err = document.getElementById('purposeError');
-      if (err) { err.textContent = ''; err.classList.remove('show'); }
-      const grp = document.getElementById('purposeGroup');
-      if (grp) grp.classList.remove('error');
+      clearError('purposeError', 'purposeGroup');
     }
 
     card.addEventListener('click', () => toggleCard(card));
@@ -33,21 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ─── STAGE PILLS (single-select) ─── */
-  const stagePills = document.querySelectorAll('.stage-pill');
+  /* ─── STAGE PILLS (single-select) ──────────────────────────────────────── */
+  const stagePills  = document.querySelectorAll('.stage-pill');
   const stageHidden = document.getElementById('stageHidden');
 
   stagePills.forEach(pill => {
     function selectPill(p) {
-      stagePills.forEach(sp => { sp.classList.remove('selected'); sp.setAttribute('aria-checked', 'false'); });
+      stagePills.forEach(sp => {
+        sp.classList.remove('selected');
+        sp.setAttribute('aria-checked', 'false');
+      });
       p.classList.add('selected');
       p.setAttribute('aria-checked', 'true');
       if (stageHidden) stageHidden.value = p.dataset.value;
-      // Clear error
-      const err = document.getElementById('stageError');
-      if (err) { err.textContent = ''; err.classList.remove('show'); }
-      const grp = document.getElementById('stageGroup');
-      if (grp) grp.classList.remove('error');
+      clearError('stageError', 'stageGroup');
     }
 
     pill.addEventListener('click', () => selectPill(pill));
@@ -56,8 +65,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ─── STANDARD FIELD VALIDATION ─── */
-  const requiredFields = form.querySelectorAll('input[required], textarea[required]');
+  /* ─── HELPERS ───────────────────────────────────────────────────────────── */
+  function clearError(errId, grpId) {
+    const err = document.getElementById(errId);
+    if (err) { err.textContent = ''; err.classList.remove('show'); }
+    const grp = document.getElementById(grpId);
+    if (grp) grp.classList.remove('error');
+  }
+
+  function showError(errId, grpId, msg) {
+    const err = document.getElementById(errId);
+    if (err) { err.textContent = msg; err.classList.add('show'); }
+    const grp = document.getElementById(grpId);
+    if (grp) grp.classList.add('error');
+  }
+
+  /* ─── STANDARD FIELD VALIDATION ────────────────────────────────────────── */
+  const requiredFields = form.querySelectorAll('input[required], textarea[required], select[required]');
 
   function validateField(field) {
     const group = field.closest('.form-group');
@@ -91,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ─── FORM SUBMIT ─── */
+  /* ─── FORM SUBMIT ───────────────────────────────────────────────────────── */
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     let valid = true;
@@ -102,59 +126,74 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validate purpose (at least 1 card selected)
     if (selectedServices.size === 0) {
       valid = false;
-      const err = document.getElementById('purposeError');
-      if (err) { err.textContent = 'Please select at least one option.'; err.classList.add('show'); }
-      const grp = document.getElementById('purposeGroup');
-      if (grp) grp.classList.add('error');
+      showError('purposeError', 'purposeGroup', 'Please select at least one option.');
     }
 
     // Validate stage (1 pill selected)
     if (!stageHidden || !stageHidden.value) {
       valid = false;
-      const err = document.getElementById('stageError');
-      if (err) { err.textContent = 'Please select your business stage.'; err.classList.add('show'); }
-      const grp = document.getElementById('stageGroup');
-      if (grp) grp.classList.add('error');
+      showError('stageError', 'stageGroup', 'Please select your business stage.');
     }
 
     if (!valid) return;
 
-    const btn = form.querySelector('[type="submit"]');
+    const btn  = form.querySelector('[type="submit"]');
     const orig = btn.textContent;
-    btn.textContent = 'Sending\u2026';
-    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    btn.disabled    = true;
 
-    const action = form.getAttribute('action') || '#';
+    /* ─── COLLECT FORM DATA ─────────────────────────────────────────────── */
+    const payload = {
+      full_name:     form.querySelector('#fullName')?.value.trim()     || '',
+      business_name: form.querySelector('#businessName')?.value.trim() || '',
+      email:         form.querySelector('#email')?.value.trim()        || '',
+      phone:         form.querySelector('#phone')?.value.trim()        || '',
+      purpose:       purposeHidden?.value                              || '',
+      stage:         stageHidden?.value                                || '',
+      bottleneck:    form.querySelector('#bottleneck')?.value          || '',
+      details:       form.querySelector('#details')?.value.trim()      || '',
+      source:        'website',
+    }
 
+    /* ─── SUBMIT TO SUPABASE ────────────────────────────────────────────── */
     try {
-      if (action === '#') {
-        await new Promise(r => setTimeout(r, 1200));
-        showSuccess();
-      } else {
-        const res = await fetch(action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { Accept: 'application/json' }
-        });
-        if (res.ok) showSuccess();
-        else throw new Error('Server error');
+      const { error } = await db
+        .from('applications')
+        .insert([payload])
+
+      if (error) {
+        console.error('[Kllezo] Supabase insert error:', error)
+        throw new Error(error.message || 'Submission failed')
       }
-    } catch {
-      btn.textContent = 'Try again';
-      btn.disabled = false;
+
+      showSuccess()
+    } catch (err) {
+      console.error('[Kllezo] Form submission error:', err)
+      btn.textContent = 'Try again ↑';
+      btn.disabled    = false;
+
+      // Show a friendly inline error at the top of the form
+      let notice = document.getElementById('submitError')
+      if (!notice) {
+        notice = document.createElement('p')
+        notice.id = 'submitError'
+        notice.style.cssText = 'color:#e05a5a;font-size:13px;margin-bottom:16px;text-align:center;'
+        form.insertBefore(notice, form.firstChild)
+      }
+      notice.textContent = 'Something went wrong. Please try again or email us directly.'
     }
 
     function showSuccess() {
       form.innerHTML = `
         <div style="text-align:center; padding: 80px 40px;">
-          <div style="font-size:32px; margin-bottom:24px;">✓</div>
+          <div style="font-size:48px; margin-bottom:24px;">✓</div>
           <p style="font-family:var(--font-display); font-size:28px; color:var(--beige); margin-bottom:16px;">Application received.</p>
           <p style="font-size:14px; color:var(--muted); line-height:1.7;">
             We review every application manually.<br>
             If it's a fit, we'll reach out within 48 hours.
           </p>
         </div>
-      `;
+      `
     }
-  });
-});
+  })
+})
