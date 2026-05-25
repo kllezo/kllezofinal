@@ -10,11 +10,28 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ─── INIT SUPABASE CLIENT ──────────────────────────────────────────────── */
   // supabase global is provided by the CDN script loaded in apply.html
   // Config values come from js/supabase-config.js (anon key only — safe for browser)
+  if (!window.supabase) {
+    console.error('[Kllezo] Supabase CDN script failed to load. window.supabase is undefined.');
+    showInitError();
+    return;
+  }
+
   const { createClient } = window.supabase
   const db = createClient(
     window.KLLEZO_SUPABASE_URL,
     window.KLLEZO_SUPABASE_ANON_KEY
   )
+
+  function showInitError() {
+    let notice = document.getElementById('submitError')
+    if (!notice) {
+      notice = document.createElement('p')
+      notice.id = 'submitError'
+      notice.style.cssText = 'color:#e05a5a;font-size:13px;margin-bottom:16px;text-align:center;'
+      form.insertBefore(notice, form.firstChild)
+    }
+    notice.textContent = 'Connection error: Supabase could not be loaded. Please reload the page or contact us.'
+  }
 
   /* ─── SERVICE CARDS (multi-select) ─────────────────────────────────────── */
   const serviceCards    = document.querySelectorAll('.service-card');
@@ -180,7 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
         notice.style.cssText = 'color:#e05a5a;font-size:13px;margin-bottom:16px;text-align:center;'
         form.insertBefore(notice, form.firstChild)
       }
-      notice.textContent = 'Something went wrong. Please try again or email us directly.'
+      const errMsg = err.message || (typeof err === 'object' ? JSON.stringify(err) : err);
+      notice.textContent = `Submission failed: ${errMsg}. Please try again or email us directly.`
     }
 
     function showSuccess() {
