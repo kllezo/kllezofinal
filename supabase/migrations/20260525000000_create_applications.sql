@@ -17,13 +17,22 @@ CREATE TABLE IF NOT EXISTS public.applications (
   email         TEXT        NOT NULL,
   phone         TEXT        NOT NULL,
 
+  -- Socials
+  website       TEXT,
+  instagram     TEXT,
+
   -- Form selections
   purpose       TEXT        NOT NULL,   -- comma-separated: content,website,ai,all
   stage         TEXT        NOT NULL,   -- starting | traction | scaling | established
-  bottleneck    TEXT        NOT NULL,   -- attention | conversion | closing | disconnected
+  bottleneck    TEXT,                   -- optional: attention | conversion | closing | disconnected
+  service       TEXT,                   -- primary service
+  services      TEXT[],                 -- array of selected services
+  budget        TEXT,                   -- budget range
+  timeline      TEXT,                   -- project timeline
 
-  -- Open text
+  -- Open text / goals
   details       TEXT,
+  goals         TEXT,
 
   -- Internal status (managed by Kllezo team)
   status        TEXT        NOT NULL    DEFAULT 'pending'  -- pending | reviewed | accepted | rejected

@@ -130,6 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const group = field.closest('.form-group');
       if (group && group.classList.contains('error')) validateField(field);
     });
+    field.addEventListener('change', () => {
+      const group = field.closest('.form-group');
+      if (group && group.classList.contains('error')) validateField(field);
+    });
   });
 
   /* ─── FORM SUBMIT ───────────────────────────────────────────────────────── */
@@ -165,11 +169,18 @@ document.addEventListener('DOMContentLoaded', () => {
       business_name: form.querySelector('#businessName')?.value.trim() || '',
       email:         form.querySelector('#email')?.value.trim()        || '',
       phone:         form.querySelector('#phone')?.value.trim()        || '',
+      website:       form.querySelector('#website')?.value.trim()      || '',
+      instagram:     form.querySelector('#instagram')?.value.trim()    || '',
       purpose:       purposeHidden?.value                              || '',
       stage:         stageHidden?.value                                || '',
       bottleneck:    form.querySelector('#bottleneck')?.value          || '',
+      service:       form.querySelector('#service')?.value             || '',
+      services:      Array.from(selectedServices),
+      budget:        form.querySelector('#budget')?.value              || '',
+      timeline:      form.querySelector('#timeline')?.value            || '',
+      goals:         form.querySelector('#goals')?.value.trim()        || '',
       details:       form.querySelector('#details')?.value.trim()      || '',
-      source:        'website',
+      source:        form.querySelector('#source')?.value              || 'website',
     }
 
     /* ─── SUBMIT TO SUPABASE ────────────────────────────────────────────── */
@@ -183,9 +194,15 @@ document.addEventListener('DOMContentLoaded', () => {
         phone:         payload.phone,
         purpose:       payload.purpose,
         stage:         payload.stage,
-        bottleneck:    payload.bottleneck,
+        source:        payload.source,
+        services:      payload.services,
         details:       payload.details,
-        source:        payload.source
+        goals:         payload.goals,
+        budget:        payload.budget,
+        timeline:      payload.timeline,
+        service:       payload.service,
+        website:       payload.website,
+        instagram:     payload.instagram
       }
 
       const { error } = await db

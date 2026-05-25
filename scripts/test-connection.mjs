@@ -59,7 +59,7 @@ async function testInsert() {
         'apikey':        SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
         'Content-Type':  'application/json',
-        'Prefer':        'return=representation',
+        'Prefer':        'return=minimal',
       },
       body: JSON.stringify({
         full_name:     'Test User',
@@ -68,9 +68,15 @@ async function testInsert() {
         phone:         '+91 00000 00000',
         purpose:       'content,website',
         stage:         'starting',
-        bottleneck:    'attention',
+        source:        'Instagram',
+        services:      ['content', 'website'],
+        service:       'website',
+        website:       'https://testcompany.com',
+        instagram:     '@testcompany',
+        budget:        '$3k - $5k',
+        timeline:      'Immediately',
+        goals:         'Launch a new marketing landing page and double conversion.',
         details:       'This is an automated connection test — safe to delete.',
-        source:        'test-script',
       })
     })
     const body = await res.text()
