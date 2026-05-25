@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ─── SUBMIT TO SUPABASE ────────────────────────────────────────────── */
     try {
+      console.log("SUPABASE INSERT PAYLOAD:", payload)
       const { error } = await db
         .from('applications')
         .insert([payload])
